@@ -9,7 +9,6 @@
 		<div>
 			<form id="addForm" method="post" wicket:id="addForm">
 					<H3><legend style="color: #F90">Add a contact</legend></H3>
-					<p wicket:id="addStatus"></p>
 
 					<table>
 					<tr><td><span>FirstName: </span></td><td><input wicket:id="firstName" type="text" id="firstName" /><br /></td>
@@ -20,6 +19,7 @@
 					<p>
 						<input type="submit" name="Add" value="Add" />
 					</p>
+					<span wicket:id="feedback"> feedback </span>
 
 			</form>
 		</div>

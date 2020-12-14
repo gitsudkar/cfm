@@ -1,16 +1,18 @@
 package com.sk.addressbook.wicket.addcontact;
 
+import org.apache.wicket.Application;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sk.addressbook.AddressBookApplication;
 import com.sk.addressbook.bean.SKContact;
 import com.sk.addressbook.db.DBUtil;
 import com.sk.addressbook.wicket.validators.EmailValidator;
@@ -26,6 +28,12 @@ public class AddPanel extends Panel {
 	}
 
 	private void init() {
+		AuthenticatedWebApplication app= (AuthenticatedWebApplication) Application.get();
+		
+		if(! AuthenticatedWebSession.get().isSignedIn()) {
+			logger.info("invalid Session, sending user to signin page");
+			app.restartResponseAtSignInPage();
+		}
 		Form addForm = new AddForm("addForm");
 		add(addForm);
 	}
@@ -42,6 +50,7 @@ public class AddPanel extends Panel {
 			super(id);
 
 			setDefaultModel(new CompoundPropertyModel(this));
+			FeedbackPanel feedbackPanel=new FeedbackPanel("feedback");
 
 			firstNameField = new TextField<String>("firstName", Model.of(""));
 			lastNameField = new TextField<String>("lastName", Model.of(""));
@@ -59,7 +68,7 @@ public class AddPanel extends Panel {
 			add(lastNameField);
 			add(emailField);
 			add(phoneField);
-			add(new Label("addStatus"));
+			add(feedbackPanel);
 
 		}
 
@@ -84,7 +93,7 @@ public class AddPanel extends Panel {
 			long endTime=System.currentTimeMillis();
 
 			logger.info("Contacted saved successfully:" + firstNameValue +" Timetaken:"+ (endTime-startTime));
-			addStatus = "Congratulations: Contact added Successfully!";
+			info("Congratulations: Contact added successfully!");
 
 		
 		}

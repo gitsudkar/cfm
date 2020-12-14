@@ -1,9 +1,13 @@
 package com.sk.addressbook.wicket.editcontact;
 
+import org.apache.wicket.Application;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
@@ -28,11 +32,19 @@ public class EditPanel extends Panel {
 	}
 
 	private void init() {
+		AuthenticatedWebApplication app= (AuthenticatedWebApplication) Application.get();
+		if(! AuthenticatedWebSession.get().isSignedIn()) {
+			logger.info("invalid Session, sending user to signin page");
+			app.restartResponseAtSignInPage();
+		}
+		
 		Form editForm = new EditForm("editForm");
 		add(editForm);
 	}
 
 	public class EditForm extends Form {
+		
+		
 
 		private TextField<String> firstNameField;
 		private TextField<String> lastNameField;
@@ -47,6 +59,8 @@ public class EditPanel extends Panel {
 			logger.debug("editform recieved:"+ firstName);
 
 			setDefaultModel(new CompoundPropertyModel(this));
+			
+			FeedbackPanel feedbackPanel=new FeedbackPanel("feedback");
 
 			firstNameField = new TextField<String>("firstName", Model.of(""));
 			lastNameField = new TextField<String>("lastName", Model.of(""));
@@ -88,7 +102,7 @@ public class EditPanel extends Panel {
 			add(lastNameField);
 			add(emailField);
 			add(phoneField);
-			add(new Label("editStatus"));
+			add(feedbackPanel);
 			add(saveButton);
 			add(deleteButton);
 		}
@@ -114,7 +128,7 @@ public class EditPanel extends Panel {
 			long endTime=System.currentTimeMillis();
 
 			logger.info("Contact saved successfully:" + firstNameValue +" Timetaken:"+ (endTime-startTime));
-			editStatus = "Congratulations contact:" + firstNameValue + " saved successfully!";
+			info("Congratulations contact:" + firstNameValue + " saved successfully!");
 
 		}
 
@@ -127,11 +141,11 @@ public class EditPanel extends Panel {
 			long endTime=System.currentTimeMillis();
 
 			if(deleteStatus == 0) {
-				editStatus = "Error: contact " + firstNameValue + " does not exist anymore!";
+				error("Error: contact " + firstNameValue + " does not exist anymore!");
 				logger.error("Delete operation on non-existant contact:" + firstNameValue +" Timetaken:"+ (endTime-startTime));
 
 			}else {
-				editStatus = "Congratulations: contact " + firstNameValue + " removed successfully!";
+				info("Congratulations: contact " + firstNameValue + " removed successfully!");
 				logger.info("Contact deleted successfully:" + firstNameValue +" Timetaken:"+ (endTime-startTime));
 
 			}

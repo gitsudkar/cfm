@@ -13,4 +13,5 @@ HSET addressBook "dabc09" "{\"firstName\":\"dabc09\",\"lastName\":\"dabc\",\"ema
 HSET addressBook "dabc10" "{\"firstName\":\"dabc10\",\"lastName\":\"dabc\",\"email\":\"dabc\",\"phone\":\"1234567890\",\"Address\":\"dabc hkjhfd \"}"
 HSET addressBook "dabc11" "{\"firstName\":\"dabc11\",\"lastName\":\"dabc\",\"email\":\"dabc\",\"phone\":\"1234567890\",\"Address\":\"dabc hkjhfd \"}"
 HSET addressBook "dabc12" "{\"firstName\":\"dabc12\",\"lastName\":\"dabc\",\"email\":\"dabc\",\"phone\":\"1234567890\",\"Address\":\"dabc hkjhfd \"}"
-HSET user "test" "{\"userid\":\"test\",\"password\":\"test\",\"role\":\"user\"}"
+HSET user "test" "{\"userid\":\"test\",\"password\":\"test\",\"role\":\"ADMIN\"}"
+HSET user "wicket" "{\"userid\":\"wicket\",\"password\":\"wicket\",\"role\":\"ADMIN\"}"

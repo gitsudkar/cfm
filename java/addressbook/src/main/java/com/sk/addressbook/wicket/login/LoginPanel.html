@@ -7,19 +7,29 @@
 <body>
 	<wicket:panel>
 		<div>
-			<form id="loginForm" method="get" wicket:id="loginForm">
+			<form id="loginForm" method="post" wicket:id="loginForm">
 				<fieldset>
-					<legend style="color: #F90">Login</legend>
-					
-					<span>Username: </span><input wicket:id="username" type="text"	id="username" /><br /> 
-					<span>Password: </span><input wicket:id="password" type="password" id="password" />
-					
+					<H3><legend style="color: #F90">Login</legend></H3>
+
+					<table id="loginTable">
+					<tr><td>
+						<span>Username: </span><input wicket:id="username" type="text"	id="username" />
+					</td></tr>
+					<tr><td> 
+						<span>Password: </span><input 	wicket:id="password" type="password" id="password" />
+					</td></tr>
+					<tr><td>
 					<p>
 						<input type="submit" name="Login" value="Login" />
 					</p>
-
+					</td></tr>
+					</table>
+					
+					<span wicket:id="feedback"> feedback </span>
+			
 				</fieldset>
 			</form>
+			
 		</div>
 	</wicket:panel>
 </body>

@@ -9,7 +9,6 @@
 		<div>
 			<form id="editForm" method="post" wicket:id="editForm">
 					<H3><legend style="color: #F90">Edit contact</legend></H3>
-					<p wicket:id="editStatus"></p>
 
 					<table>
 					<tr><td><span>FirstName: </span></td><td><input wicket:id="firstName" type="text" id="firstName" readonly /><br /></td>
@@ -21,6 +20,8 @@
 					<tr><td><input wicket:id="save" type="submit" name="Save" value="Save" id="save" /></td><td><input wicket:id="delete" type="submit" name="delete" value="Delete" id="delete"/></td></tr>
 					</table>
 					
+					<span wicket:id="feedback"> feedback </span>
+
 			</form>
 		</div>
 	</wicket:panel>

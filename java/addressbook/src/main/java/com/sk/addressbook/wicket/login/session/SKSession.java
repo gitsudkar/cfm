@@ -1,6 +1,7 @@
 package com.sk.addressbook.wicket.login.session;
 
-import org.apache.wicket.Application;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
@@ -11,20 +12,25 @@ import com.sk.addressbook.db.DBUtil;
 
 public class SKSession extends AuthenticatedWebSession {
 	Logger logger = LoggerFactory.getLogger(SKSession.class);
-
+	
 	public SKSession(Request request) {
 
 		super(request);
-		logger.info("inside SKsession constr"); ;
+		logger.debug("inside SKsession constr"); ;
 
 	}
-
-	@Override
-	protected boolean authenticate(String username, String password) {
+	
+	protected boolean authenticate(final String username,final String password) {
 		// TODO Auto-generated method stub
-		logger.info("inside SKsession authenticate"); ;
+		long startTime=System.currentTimeMillis();
+		boolean authNResult=false;
+		logger.debug("inside SKsession authenticate");
+		
+		authNResult=DBUtil.validateCreds(username, password);
+		long endTime=System.currentTimeMillis();
+		logger.info("AuthN call for user:" + username +""+ (authNResult?": Succeeded":":Failed ") + "TimeTaken:"+ (endTime-startTime));
 
-		return DBUtil.validateCreds(username, password);
+		return authNResult;
 	}
 
 	@Override
@@ -35,5 +41,7 @@ public class SKSession extends AuthenticatedWebSession {
 		}
 		return null;
 	}
+
+
 	
 }
