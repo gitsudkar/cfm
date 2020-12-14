@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<wicket:panel>
+		<div>
+			<form wicket:id="getAllForm">
+				<H3>
+					<legend style="color: #F90">Search for contacts</legend>
+				</H3>
+				<table id="searchByFirstNameTable">
+				<tr>
+				<td><B><Label id="searchByFirstName">Search: </Label></B></td>
+				<td><input wicket:id="filter" type="text" id="filter" size="50" placeholder="Enter first name"/></td>
+				<td><input type="submit" name="Search" value="Search" size="30" class="button" > </td>
+				</tr>
+				</table>
+			</form>
+			<br /> <br />
+			<table id="getAllTable" wicket:id="getAllTable"></table>
+		</div>
+	</wicket:panel>
+</body>
+</html>
