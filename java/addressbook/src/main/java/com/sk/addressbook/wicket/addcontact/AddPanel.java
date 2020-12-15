@@ -4,6 +4,7 @@ import org.apache.wicket.Application;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.feedback.FeedbackMessage;
+import org.apache.wicket.markup.html.form.EmailTextField;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -56,13 +57,13 @@ public class AddPanel extends Panel {
 
 			firstNameField = new TextField<String>("firstName", Model.of(""));
 			lastNameField = new TextField<String>("lastName", Model.of(""));
-			emailField = new TextField<String>("email", Model.of(""));
+			emailField = new EmailTextField("email", Model.of(""));
 			phoneField = new TextField<String>("phone", Model.of(""));
 
 			firstNameField.setRequired(true);
 			firstNameField.add(new FirstNameValidator());
 			lastNameField.add(new LastNameValidator());
-			emailField.add(new EmailValidator());
+			//emailField.add(new EmailValidator());
 			phoneField.add(new PhoneValidator());
 
 			add(firstNameField);
