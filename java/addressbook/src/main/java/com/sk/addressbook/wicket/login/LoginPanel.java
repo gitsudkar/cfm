@@ -1,17 +1,18 @@
 package com.sk.addressbook.wicket.login;
 
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.sk.addressbook.wicket.validators.ExactErrorLevelFilter;
+import com.sk.addressbook.wicket.validators.UserNameValidator;
 
 public class LoginPanel extends Panel {
 	Logger logger = LoggerFactory.getLogger(LoginPanel.class);
@@ -29,27 +30,31 @@ public class LoginPanel extends Panel {
 	public class LoginForm extends Form{
 		private String username;
 		private String password;
-		FeedbackPanel feedbackPanel=new FeedbackPanel("feedback");
 
+		
+		
 		public LoginForm(String id) {
 			super(id);
-			
+			RequiredTextField<String> usernameField=new RequiredTextField<String>("username");
 			setDefaultModel(new CompoundPropertyModel(this));
-			add(new RequiredTextField<String>("username"));
+			
+			usernameField.add(new UserNameValidator());
+			
+			add(usernameField);
 			add(new PasswordTextField("password"));
-			add(feedbackPanel);
+
+			add(new FeedbackPanel("feedbackMessage", new ExactErrorLevelFilter(FeedbackMessage.ERROR)));
+			add(new FeedbackPanel("succesMessage", new ExactErrorLevelFilter(FeedbackMessage.SUCCESS)));
 		}
 
 		public final void onSubmit() {		
 			boolean authNResult=AuthenticatedWebSession.get().signIn(username, password);
 			
 			if(authNResult) {
-				info("Success: You are authenticated.");
-
+				success("Success: You are authenticated.");
 				continueToOriginalDestination();
 			}else {
-				//loginStatus="Failure: Invalid userid/pwd.";
-				error("Failure: Invalid userid/pwd.");
+				error("Failure: Invalid userid or password.");
 			}
 		}
 	}

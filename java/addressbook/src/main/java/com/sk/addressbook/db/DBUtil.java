@@ -47,7 +47,8 @@ public class DBUtil {
 	public static boolean validateCreds(String userid,String password) {
 		logger.debug("Recieved request for validating creds");
 		 SKUser  skUser = gson.fromJson(Redis.getInstance().get("user",userid), SKUser.class);
-		 if(skUser.getPassword().equals(password)) {
+		 
+		 if(skUser !=null && skUser.getPassword()!=null && skUser.getPassword().equals(password)) {
 			 return true;
 		 }
 		return false;

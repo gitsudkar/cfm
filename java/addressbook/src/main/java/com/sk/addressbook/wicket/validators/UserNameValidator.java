@@ -3,12 +3,8 @@ package com.sk.addressbook.wicket.validators;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class FirstNameValidator  implements IValidator<String> {
-	private static Logger logger = LoggerFactory.getLogger(FirstNameValidator.class);
-
+public class UserNameValidator implements IValidator<String> {
 
 	@Override
 	public void validate(IValidatable<String> validatable) {
@@ -20,25 +16,24 @@ public class FirstNameValidator  implements IValidator<String> {
 		// Check if username is atleast 5 characters long
 		if (username.length() < 3) {
 			ValidationError error = new ValidationError(this);
-			error.setMessage("Error: firstname should be atleast 3 chars.");
+			error.setMessage("Error: Username should be atleast 3 chars");
 			validatable.error(error);
 		}
 
 		// Check if username is at max 5 characters long
 		if (username.length() > 15) {
 			ValidationError error = new ValidationError(this);
-			error.setMessage("Error: firstname should be at max 15 chars.");
+			error.setMessage("Error: Username should be at max 15 chars");
 			validatable.error(error);
 		}
 
 		// Check if username contains any special chars
 		if (!username.matches(regex)) {
 			ValidationError error = new ValidationError(this);
-			error.setMessage("Error: No special characters allowed in firstname. Can only contain alphabets and numerals.");
+			error.setMessage("Error: username can contain only alphabets and/or numbers");
 			validatable.error(error);
 		}
 
 	}
-
 
 }

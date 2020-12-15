@@ -3,7 +3,7 @@ package com.sk.addressbook.wicket.addcontact;
 import org.apache.wicket.Application;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -16,7 +16,9 @@ import org.slf4j.LoggerFactory;
 import com.sk.addressbook.bean.SKContact;
 import com.sk.addressbook.db.DBUtil;
 import com.sk.addressbook.wicket.validators.EmailValidator;
+import com.sk.addressbook.wicket.validators.ExactErrorLevelFilter;
 import com.sk.addressbook.wicket.validators.FirstNameValidator;
+import com.sk.addressbook.wicket.validators.LastNameValidator;
 import com.sk.addressbook.wicket.validators.PhoneValidator;
 
 public class AddPanel extends Panel {
@@ -28,9 +30,9 @@ public class AddPanel extends Panel {
 	}
 
 	private void init() {
-		AuthenticatedWebApplication app= (AuthenticatedWebApplication) Application.get();
-		
-		if(! AuthenticatedWebSession.get().isSignedIn()) {
+		AuthenticatedWebApplication app = (AuthenticatedWebApplication) Application.get();
+
+		if (!AuthenticatedWebSession.get().isSignedIn()) {
 			logger.info("invalid Session, sending user to signin page");
 			app.restartResponseAtSignInPage();
 		}
@@ -50,7 +52,7 @@ public class AddPanel extends Panel {
 			super(id);
 
 			setDefaultModel(new CompoundPropertyModel(this));
-			FeedbackPanel feedbackPanel=new FeedbackPanel("feedback");
+			FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
 
 			firstNameField = new TextField<String>("firstName", Model.of(""));
 			lastNameField = new TextField<String>("lastName", Model.of(""));
@@ -59,21 +61,21 @@ public class AddPanel extends Panel {
 
 			firstNameField.setRequired(true);
 			firstNameField.add(new FirstNameValidator());
-			lastNameField.add(new FirstNameValidator());
+			lastNameField.add(new LastNameValidator());
 			emailField.add(new EmailValidator());
 			phoneField.add(new PhoneValidator());
 
-			
 			add(firstNameField);
 			add(lastNameField);
 			add(emailField);
 			add(phoneField);
-			add(feedbackPanel);
-
+			add(new FeedbackPanel("feedbackMessage", new ExactErrorLevelFilter(FeedbackMessage.ERROR)));
+			add(new FeedbackPanel("succesMessage", new ExactErrorLevelFilter(FeedbackMessage.SUCCESS)));
+		
 		}
 
 		public final void onSubmit() {
-			long startTime=System.currentTimeMillis();
+			long startTime = System.currentTimeMillis();
 
 			final String firstNameValue = firstNameField.getModelObject();
 			final String lastNameValue = lastNameField.getModelObject();
@@ -87,15 +89,14 @@ public class AddPanel extends Panel {
 			contact.setLastName(lastNameValue);
 			contact.setEmail(emailValue);
 			contact.setPhone(phoneValue);
-			
-			DBUtil.saveContact(firstNameValue,contact);
 
-			long endTime=System.currentTimeMillis();
+			DBUtil.saveContact(firstNameValue, contact);
 
-			logger.info("Contacted saved successfully:" + firstNameValue +" Timetaken:"+ (endTime-startTime));
-			info("Congratulations: Contact added successfully!");
+			long endTime = System.currentTimeMillis();
 
-		
+			logger.info("Contacted saved successfully:" + firstNameValue + " Timetaken:" + (endTime - startTime));
+			success("Congratulations: Contact added successfully!");
+
 		}
 	}
 }

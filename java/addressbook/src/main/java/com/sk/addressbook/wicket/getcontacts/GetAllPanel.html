@@ -14,13 +14,14 @@
 				<table id="searchByFirstNameTable">
 				<tr>
 				<td><B><Label id="searchByFirstName">Search: </Label></B></td>
-				<td><input wicket:id="filter" type="text" id="filter" size="50" placeholder="Enter first name"/></td>
-				<td><input type="submit" name="Search" value="Search" size="30" class="button" > </td>
-				</tr>
+				<td><input wicket:id="filter" type="text" id="filter" size="50" placeholder="Enter first name"/></td>				
+				<td><input type="submit" name="Search" value="Search" size="30" class="button" > </td></tr>
 				</table>
 			</form>
 			<br /> <br />
-			<table id="getAllTable" wicket:id="getAllTable"></table>
+			<table id="getAllTable" wicket:id="getAllTable"></table><br>
+			<div style="color:black" wicket:id="succesMessage"></div>
+			
 		</div>
 	</wicket:panel>
 </body>

@@ -3,7 +3,7 @@ package com.sk.addressbook.wicket.editcontact;
 import org.apache.wicket.Application;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -18,9 +18,10 @@ import org.slf4j.LoggerFactory;
 import com.sk.addressbook.AddressBookApplication;
 import com.sk.addressbook.bean.SKContact;
 import com.sk.addressbook.db.DBUtil;
-import com.sk.addressbook.db.Redis;
 import com.sk.addressbook.wicket.validators.EmailValidator;
+import com.sk.addressbook.wicket.validators.ExactErrorLevelFilter;
 import com.sk.addressbook.wicket.validators.FirstNameValidator;
+import com.sk.addressbook.wicket.validators.LastNameValidator;
 import com.sk.addressbook.wicket.validators.PhoneValidator;
 
 public class EditPanel extends Panel {
@@ -60,7 +61,6 @@ public class EditPanel extends Panel {
 
 			setDefaultModel(new CompoundPropertyModel(this));
 			
-			FeedbackPanel feedbackPanel=new FeedbackPanel("feedback");
 
 			firstNameField = new TextField<String>("firstName", Model.of(""));
 			lastNameField = new TextField<String>("lastName", Model.of(""));
@@ -75,10 +75,11 @@ public class EditPanel extends Panel {
 			phoneField.setModelValue(new String[] { skContact.getPhone() });
 
 			firstNameField.add(new FirstNameValidator());
-			lastNameField.add(new FirstNameValidator());
+			lastNameField.add(new LastNameValidator());
 			emailField.add(new EmailValidator());
 			phoneField.add(new PhoneValidator());
 
+			
 			Button saveButton = new Button("save") {
 				@Override
 				public void onSubmit() {
@@ -102,9 +103,11 @@ public class EditPanel extends Panel {
 			add(lastNameField);
 			add(emailField);
 			add(phoneField);
-			add(feedbackPanel);
 			add(saveButton);
 			add(deleteButton);
+			add(new FeedbackPanel("feedbackMessage", new ExactErrorLevelFilter(FeedbackMessage.ERROR)));
+			add(new FeedbackPanel("succesMessage", new ExactErrorLevelFilter(FeedbackMessage.SUCCESS)));
+
 		}
 
 		public final void savePressed() {
@@ -128,7 +131,7 @@ public class EditPanel extends Panel {
 			long endTime=System.currentTimeMillis();
 
 			logger.info("Contact saved successfully:" + firstNameValue +" Timetaken:"+ (endTime-startTime));
-			info("Congratulations contact:" + firstNameValue + " saved successfully!");
+			success("Congratulations contact:" + firstNameValue + " saved successfully!");
 
 		}
 
@@ -145,7 +148,7 @@ public class EditPanel extends Panel {
 				logger.error("Delete operation on non-existant contact:" + firstNameValue +" Timetaken:"+ (endTime-startTime));
 
 			}else {
-				info("Congratulations: contact " + firstNameValue + " removed successfully!");
+				success("Congratulations: contact " + firstNameValue + " removed successfully!");
 				logger.info("Contact deleted successfully:" + firstNameValue +" Timetaken:"+ (endTime-startTime));
 
 			}
